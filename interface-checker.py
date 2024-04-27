@@ -34,23 +34,23 @@ def compare_interfaces():
     parser.add_argument("interface_name", help="The name of the interface defined in caller_contract_path.vy")
     parser.add_argument("--strict", action=argparse.BooleanOptionalAction, help="Only print output when there is a confirmed issue, ignore possible false positives. Do not print DONE.")
     parser.add_argument("--skip-unused", action=argparse.BooleanOptionalAction, help="Skip checking for (low priority) unused interface definitions")
-    parser.add_argument("--use-color", action=argparse.BooleanOptionalAction, help="Add color to the output, to enhance readability")
+    parser.add_argument("--disable-color", action=argparse.BooleanOptionalAction, help="Disable the color and bold text output to be the default console font")
 
     args = parser.parse_args()
     
     # Setup Step setting up colors in the Terminal
-    if args.use_color:
-        redtext = '\033[31m'
-        purpletext = '\033[35m'
-        yellowtext = '\033[33m'
-        boldtext = '\033[1m'
-        resetfont = '\033[m'
-    else:
+    if args.disable_color:
         redtext = ''
         purpletext = ''
         yellowtext = ''
         boldtext = ''
         resetfont = ''
+    else:
+        redtext = '\033[31m'
+        purpletext = '\033[35m'
+        yellowtext = '\033[33m'
+        boldtext = '\033[1m'
+        resetfont = '\033[m'
         
     # Step 1: get the external interface for the called vyper contract
     # this is the "correct" interface of the called contract
