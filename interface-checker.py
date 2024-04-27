@@ -34,9 +34,24 @@ def compare_interfaces():
     parser.add_argument("interface_name", help="The name of the interface defined in caller_contract_path.vy")
     parser.add_argument("--strict", action=argparse.BooleanOptionalAction, help="Only print output when there is a confirmed issue, ignore possible false positives. Do not print DONE.")
     parser.add_argument("--skip-unused", action=argparse.BooleanOptionalAction, help="Skip checking for (low priority) unused interface definitions")
+    parser.add_argument("--use-color", action=argparse.BooleanOptionalAction, help="Add color to the output to help readability")
 
     args = parser.parse_args()
-
+    
+    # Setup Step setting up colors in the Terminal
+    if args.use_color:
+        redtext = '\033[31m'
+        purpletext = '\033[35m'
+        yellowtext = '\033[33m'
+        boldtext = '\033[1m'
+        resetfont = '\033[m'
+    else:
+        redtext = ''
+        purpletext = ''
+        yellowtext = ''
+        boldtext = ''
+        resetfont = ''
+        
     # Step 1: get the external interface for the called vyper contract
     # this is the "correct" interface of the called contract
     cmd_output = subprocess.run(["vyper", "-f", "external_interface", args.called_contract_path], capture_output=True, text = True)
@@ -99,15 +114,16 @@ def compare_interfaces():
             # Another common reason this is reached is if the function argument is optional
             partial_line = line[:line.find("(")+1]
             if called_contract_interface_definition.find(partial_line) < 0:
-                print("PROBLEM LINE FOUND! Interface '" + args.interface_name + "' in " + args.caller_contract_path + " doesn't match " + args.called_contract_path)
-                print(line)
+                print(redtext+"PROBLEM LINE FOUND!",resetfont)
+                print(purpletext+"Interface '" + args.interface_name + "' in " + args.caller_contract_path + " doesn't match " + args.called_contract_path,resetfont)
+                print(boldtext+line,resetfont)
             else:
                 # variables like ERC20 and address are generally the same, but this tool isn't smart enough to realize this
                 # this code branch can also be reached if there is an annotation misalignment between nonpayable and view
                 # any mismatch raises an alert even if it is a false positive, unless the strict flag is set
                 if not args.strict:
                     print("likely a false positive, but check this interface definition in " + args.caller_contract_path + ":")
-                    print(line)
+                    print(boldtext+line,resetfont)
 
     # Step 5: Every interface in the caller contract SHOULD be used later in the caller contract, otherwise it is unused and can be removed
     # If there is an unused interface in the caller contract, alert the user of the issue unless the skip_unused flag is set
@@ -116,8 +132,9 @@ def compare_interfaces():
             function_name = line[line.find("def ")+len("def "):line.find("(")]
             if rest_of_caller_code.find("." + function_name + "(") < 0:
                 print()
-                print("PROBLEM LINE FOUND! Function '" + function_name + "' in interface " + args.interface_name + " and contract " + args.caller_contract_path + " is never used")
-                print(line)
+                print(redtext+"PROBLEM LINE FOUND!",resetfont)
+                print(yellowtext+"Function '" + function_name + "' in interface " + args.interface_name + " and contract " + args.caller_contract_path + " is never used",resetfont)
+                print(boldtext+line,resetfont)
 
     if not args.strict:
         print("DONE")
