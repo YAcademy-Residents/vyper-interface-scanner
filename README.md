@@ -53,6 +53,6 @@ options:
                         Only print output when there is a confirmed issue, ignore possible false positives. Do not print DONE.
   --skip-unused, --no-skip-unused
                         Skip checking for (low priority) unused interface definitions
-  ----use-color, --no-use-color
-                        Add color to the output, to enhance readability
+  --disable-color, --no-disable-color
+                        Disable the color and bold text output to be the default console font
 ```
