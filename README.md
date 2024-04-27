@@ -38,7 +38,7 @@ PROBLEM LINE FOUND! Function 'trade' in interface Factory and contract Exchange.
 This tool requires the correct Vyper compiler version to be installed. Vyper 3.10 was used for testing, which can be installed with `pip3 install vyper==0.3.10`.
 
 ```
-usage: interface-checker.py [-h] [--strict | --no-strict] [--skip-unused | --no-skip-unused] called_contract_path caller_contract_path interface_name
+usage: interface-checker.py [-h] [--strict | --no-strict] [--skip-unused | --no-skip-unused] [--use-color | --no-use-color] called_contract_path caller_contract_path interface_name
 
 Run the script with: python interface-checker.py called_contract.vy caller_contract.vy interface_name
 
@@ -53,4 +53,6 @@ options:
                         Only print output when there is a confirmed issue, ignore possible false positives. Do not print DONE.
   --skip-unused, --no-skip-unused
                         Skip checking for (low priority) unused interface definitions
+  ----use-color, --no-use-color
+                        Add color to the output, to enhance readability
 ```
