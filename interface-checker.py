@@ -34,7 +34,7 @@ def compare_interfaces():
     parser.add_argument("interface_name", help="The name of the interface defined in caller_contract_path.vy")
     parser.add_argument("--strict", action=argparse.BooleanOptionalAction, help="Only print output when there is a confirmed issue, ignore possible false positives. Do not print DONE.")
     parser.add_argument("--skip-unused", action=argparse.BooleanOptionalAction, help="Skip checking for (low priority) unused interface definitions")
-    parser.add_argument("--use-color", action=argparse.BooleanOptionalAction, help="Add color to the output to help readability")
+    parser.add_argument("--use-color", action=argparse.BooleanOptionalAction, help="Add color to the output, to enhance readability")
 
     args = parser.parse_args()
     
